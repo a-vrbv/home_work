@@ -1,3 +1,5 @@
+
+
 def mask_account_card(mask_number: str) -> str:
     """Функция принимает аргумент - строку, содержащую тип и номер карты или счета.
     Аргументом может быть строка типа
@@ -25,3 +27,13 @@ def mask_account_card(mask_number: str) -> str:
         """Берем название карты и соединяем со скрытым номером."""
         cart_name = " ".join(elements[:-1])
         return f"{cart_name} {hidden_middle_element}"
+
+
+def get_date(date_today: str) -> str:
+    """Получаем строку с датой в формате "2024-03-11T02:26:18.671407"
+       и возвращает строку с датой в формате "ДД.ММ.ГГГГ"."""
+
+    day = date_today[8:10]
+    month = date_today[5:7]
+    year = date_today[:4]
+    return f"{day}.{month}.{year}"
