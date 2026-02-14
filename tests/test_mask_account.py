@@ -63,5 +63,12 @@ def test_incorrect_number_account(incorrect_number_account, expected):
 
 
 def test_non_numeric_account():
+    """Тест на проверку корректности ввода номера счета. Выбрасывает ошибку, если при вводе были добавлены нечисловые
+    символы."""
     with pytest.raises(ValueError, match="Номер счета должен состоять только из цифр."):
         get_mask_account("1#25d5!45d")
+
+def test_non_space_account():
+    """Тест на проверку корректности ввода номера счета. Выбрасывает ошибку, если при вводе были добавлены пробелы."""
+    with pytest.raises(ValueError,match="Номер счета должен состоять только из цифр."):
+        get_mask_account("112 121")
