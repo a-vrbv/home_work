@@ -75,7 +75,6 @@ def test_mask_account_incorrect_input(incorrect_account_input):
         assert mask_number[-4:].isdigit()
 
 
-
 @pytest.mark.parametrize(
     "input_str, expected",
     [

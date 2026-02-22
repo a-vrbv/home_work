@@ -26,7 +26,7 @@ def test_correct_card_number_fixture(correct_card_number):
         assert result[4] == " "
         assert result[7:9] == "**"
         assert result[10:14] == "****"
-        assert result[15] == " "
+        assert result[14] == " "
 
 
 @pytest.fixture()
@@ -44,7 +44,7 @@ def incorrect_card_length():
 def test_incorrect_card_length_fixture(incorrect_card_length):
     """Тестируем ввод длины карты и выброс ошибок при некорректных данных длины карты при вводе."""
     for card in incorrect_card_length:
-        with pytest.raises(ValueError, match="Номер карты должен состоять из 16 цифр."):
+        with pytest.raises(ValueError, match="Номер карты состоит из 16 цифр."):
             get_mask_card_number(card)
 
 
@@ -52,7 +52,7 @@ def test_incorrect_card_length_fixture(incorrect_card_length):
     "card_input,expected",
     [
         ("7777888855552222", "7777 88** **** 2222"),
-        (777888855552222, "7777 88** **** 2222"),
+        (7777888855552222, "7777 88** **** 2222"),
         ("9999888877776666", "9999 88** **** 6666"),
         (1111222233334444, "1111 22** **** 4444"),
     ],
@@ -75,11 +75,11 @@ def test_incorrect_card_input(card_input, expected):
 )
 def test_incorrect_input(incorrect_input):
     """Тестируем ввод длины карты и выброс ошибок при некорректных данных длины карты при вводе."""
-    with pytest.raises(ValueError, match="Номер карты должен состоять из 16 цифр."):
+    with pytest.raises(ValueError, match="Номер карты состоит из 16 цифр."):
         get_mask_card_number(incorrect_input)
 
 
 def test_non_numeric_strings():
     """Тестируем ввод данных с буквами и выброс ошибок при нечисловых строках."""
-    with pytest.raises(ValueError, match="Номер карты должен состоять из 16 цифр."):
+    with pytest.raises(ValueError, match="Номер карты должен содержать только цифры."):
         get_mask_card_number("12452ds4f5sd41f5")
