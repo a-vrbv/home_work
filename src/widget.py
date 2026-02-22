@@ -1,4 +1,4 @@
-from masks import get_mask_card_number, get_mask_account
+from src.masks import get_mask_card_number, get_mask_account
 
 
 def mask_account_card(mask_number: str) -> str:
@@ -25,8 +25,8 @@ def mask_account_card(mask_number: str) -> str:
         # Используем импортированную функцию для маскирования номера карты
         hidden_middle_element = get_mask_card_number(number)
         """Берем название карты и соединяем со скрытым номером."""
-        cart_name = " ".join(elements[:-1])
-        return f"{cart_name} {hidden_middle_element}"
+        card_name = " ".join(elements[:-1])
+        return f"{card_name} {hidden_middle_element}"
 
 
 def get_date(date_today: str) -> str:
