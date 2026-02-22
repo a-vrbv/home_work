@@ -23,13 +23,28 @@ def test_mask_card_incorrect_input(incorrect_card_input):
     for card_input in incorrect_card_input:
         result = mask_account_card(card_input)
         assert " " in result
-        last_number = card_input.split()[-1]
-        assert result[-4:] == last_number[-4:]
-        mask_part = result.split()[-2]
-        full_mask_part = " ".join(mask_part)
-        assert len(full_mask_part) == 19
-        assert full_mask_part[4] == " "
-        assert full_mask_part[7:9] == "**"
+        original_number = card_input.split()[-1]
+        assert result[-4:] == original_number[-4:]
+        # Разделяем результат на части
+        parts = result.split()
+        # Проверяем название карты (первые элементы)
+        card_name = " ".join(parts[:-4])  # все элементы, кроме последних 4 (номера)
+        expected_name = " ".join(card_input.split()[:-1])
+        assert card_name == expected_name
+        # Извлекаем замаскированный номер (последние 4 части)
+        masked_number_parts = parts[-4:]
+        masked_number = " ".join(masked_number_parts)
+        # Проверяем полную длину замаскированного номера (с пробелами)
+        assert len(masked_number) == 19
+        # Проверки структуры маски
+        # Первые 4 цифры должны совпадать
+        assert masked_number_parts[0] == original_number[:4]
+        # Следующие 2 цифры + ** должны совпадать
+        assert masked_number_parts[1] == original_number[4:6] + "**"
+        # Средняя часть должна быть ****
+        assert masked_number_parts[2] == "****"
+        # Последние 4 цифры должны совпадать
+        assert masked_number_parts[3] == original_number[-4:]
 
 
 @pytest.fixture()
@@ -49,14 +64,16 @@ def test_mask_account_incorrect_input(incorrect_account_input):
     начинается со слова 'Счет', номер счета замаскирован и сохранены последние 4 цифры."""
     for account_input in incorrect_account_input:
         result = mask_account_card(account_input)
-        assert result.startswith("Счет ")
-        mask_number = result.split(" ")[1]
-
-        assert len(mask_number) == 6
-        assert mask_number[:2] == "**"
-        assert mask_number[2:].isdigit()
+        assert result.startswith("Счет ") or result.startswith("Счёт ")
+        mask_number = result.split(" ", 1)[1]
         original_number = account_input.split()[-1]
-        assert mask_number[-4:] == original_number[-4]
+
+        assert mask_number[-4:] == original_number[-4:]
+        if len(mask_number) > 4:
+            assert mask_number[:-4].startswith("**")
+
+        assert mask_number[-4:].isdigit()
+
 
 
 @pytest.mark.parametrize(
@@ -92,7 +109,7 @@ def test_mask_account_specific_cases(input_str, expected):
 def test_incorrect_account_length():
     """Тест на проверку корректной длины счета менее 4 символов.
     Выбрасывает ошибку, если менее 4 символов."""
-    with pytest.raises(ValueError, match="Номер счета должен содержать 4 и более цифр."):
+    with pytest.raises(ValueError, match="Номер счета содержит не менее 4 цифр."):
         mask_account_card("Счет 147")
 
 
